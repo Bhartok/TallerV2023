@@ -154,7 +154,7 @@
         <entry>
           <string>Description</string>
           <string>J K Q
-1 0 1, establece la salida a 1
+1 0 1, establece la salida a 1(setea)
 0 1 0, establece la salida a 0(resetea)
 0 0 -&gt; Estado de memoria, preserva el valor que tenía antes
 1 1 -&gt; Estado complementario, da el inverso de la salida que se tenía antes</string>
@@ -166,12 +166,12 @@
       <elementName>Rectangle</elementName>
       <elementAttributes>
         <entry>
-          <string>Label</string>
-          <string>Main</string>
-        </entry>
-        <entry>
           <string>RectHeight</string>
           <int>16</int>
+        </entry>
+        <entry>
+          <string>Label</string>
+          <string>Main</string>
         </entry>
         <entry>
           <string>RectWidth</string>
