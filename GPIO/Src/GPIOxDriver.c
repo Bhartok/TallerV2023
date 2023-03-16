@@ -20,19 +20,19 @@ void GPIO_Config (GPIO_Handler_t *pGPIOHandler){
 		//Escribimos 1(Set) en la posicion correspondiente al GPIOA
 		RCC->AHB1ENR |= (SET <<RCC_AHB1ENR_GPIOA_EN);
 	}else if(pGPIOHandler->pGPIOx == GPIOB){
-		//Escribimos 1(Set) en la posicion correspondiente al GPIOA
+		//Escribimos 1(Set) en la posicion correspondiente al GPIOB
 		RCC->AHB1ENR |= (SET <<RCC_AHB1ENR_GPIOB_EN);
 	}else if(pGPIOHandler->pGPIOx == GPIOC){
-		//Escribimos 1(Set) en la posicion correspondiente al GPIOA
+		//Escribimos 1(Set) en la posicion correspondiente al GPIOC
 		RCC->AHB1ENR |= (SET <<RCC_AHB1ENR_GPIOC_EN);
 	}else if(pGPIOHandler->pGPIOx == GPIOD){
-		//Escribimos 1(Set) en la posicion correspondiente al GPIOA
+		//Escribimos 1(Set) en la posicion correspondiente al GPIOD
 		RCC->AHB1ENR |= (SET <<RCC_AHB1ENR_GPIOD_EN);
 	}else if(pGPIOHandler->pGPIOx == GPIOE){
-		//Escribimos 1(Set) en la posicion correspondiente al GPIOA
+		//Escribimos 1(Set) en la posicion correspondiente al GPIOE
 		RCC->AHB1ENR |= (SET <<RCC_AHB1ENR_GPIOE_EN);
 	}else if(pGPIOHandler->pGPIOx == GPIOH){
-		//Escribimos 1(Set) en la posicion correspondiente al GPIOA
+		//Escribimos 1(Set) en la posicion correspondiente al GPIOH
 		RCC->AHB1ENR |= (SET <<RCC_AHB1ENR_GPIOH_EN);
 	}
 
@@ -81,20 +81,37 @@ void GPIO_Config (GPIO_Handler_t *pGPIOHandler){
 //Funcion utilizada para cambiar el estado del pin entregado en el handler asignando el valor entregado en la variable newState
 void GPIO_WritePin(GPIO_Handler_t *pPinHandler, uint8_t newState){
 	if(newState == SET){
-		//Trabajando con la parte baja del rejistro
+		//Trabajando con la parte baja del registro(SET)
 		pPinHandler->pGPIOx->BSRR |= (SET << pPinHandler->GPIO_PinConfig.GPIO_PinNumber);
 	}else{
-		pPinHandler->pGPIOx->BSRR |= (SET << pPinHandler->GPIO_PinConfig.GPIO_PinNumber + 16);
+		//Trabajando con la parte alta del registro(RESET)
+		pPinHandler->pGPIOx->BSRR |= (SET << (pPinHandler->GPIO_PinConfig.GPIO_PinNumber + 16));
 	}
 }
 
 //Funcion utilizada para leer el estado de un pin especifico
-uint32_t GPIO_ReadPin(GPIO_Handler_t*pPinHandler){
+uint32_t GPIO_ReadPin(GPIO_Handler_t *pPinHandler){
 	//Este va a ser la variable que retornaremos
 	uint32_t pinValue = 0;
-	//Cargamos el valor del registro IDR, desplazado a la derecha tantas veces como la ubicación del pin especifico
-	pinValue = (pPinHandler->pGPIOx->IDR >> pPinHandler->GPIO_PinConfig.GPIO_PinNumber);
+	/*
+	 * 1.Se obtienen todos los valores del IDR como un numero binario
+	 * 2.Se corren PinNumber veces a la derecha para tener el estado del pin como primer posición de ese numero binario
+	 * 3.Se extrae esa primer posición con una operación AND y una mascara que tiene un 1 como primera posición que
+	 *   corresponde al estado del pin
+	  */
+	pinValue = (pPinHandler->pGPIOx->IDR>>pPinHandler->GPIO_PinConfig.GPIO_PinNumber)&(1<<0);
 	return pinValue;
+}
+
+//Funcion que cambia el estado del pin a su complemento
+void GPIOxTogglePin(GPIO_Handler_t *pPinHandler){
+	/*Variable que halla el complemento del estado del pin,mediante la operación XOR.
+	 *	Si el pin tiene estado 0->Complemento=1
+	 *	Si el pin tiene estado 1->Complemento=0
+	 */
+	uint8_t complemento = GPIO_ReadPin(pPinHandler)^(1);
+	//Escribe en el pin el complemento de su estado, complemento=0->"Apaga el pin", complemento=1->"Enciende el pin"
+	GPIO_WritePin(pPinHandler, complemento);
 }
 
 

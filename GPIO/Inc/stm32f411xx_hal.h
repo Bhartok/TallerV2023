@@ -5,6 +5,14 @@
  *      Author: bhartok
  */
 
+ /*
+ * Contiene la informacion mas basica del micro, valores de reloj principal,
+ * Distribución basica de la memoria
+ * Posiciones de memoria de los periféricos
+ * Demás registros de los periféricos
+ * Definiciones de las constantes más basicas
+ */
+
 #ifndef STM32F411XX_HAL_H_
 #define STM32F411XX_HAL_H_
 
@@ -12,7 +20,7 @@
 #include <stddef.h>
 
 #define HSI_CLOCK_SPEED	16000000 //Valor de la señal reloj High Speed Internal
-#define HSE_CLOCK_SPEED	4000000 //Valor de la señal reloj High Speed External
+#define HSE_CLOCK_SPEED	4000000 /</Valor de la señal reloj High Speed External
 
 #define NOP()	asm("NOP")//Preguntar nerio
 #define __weak	__attribute__((weak))

@@ -1,30 +1,53 @@
-/**
- ******************************************************************************
- * @file           : main.c
- * @author         : josancheze
- * @brief          : Configuracion basica de un proyecto
- ******************************************************************************
- * @attention
+/*
+ * IntroGPIOxMain.c
  *
- * Copyright (c) 2023 STMicroelectronics.
- * All rights reserved.
- *
- * This software is licensed under terms that can be found in the LICENSE file
- * in the root directory of this software component.
- * If no LICENSE file comes with this software, it is provided AS-IS.
- *
- ******************************************************************************
+ *  Created on: Mar 9, 2023
+ *      Author: bhartok
  */
+
 
 #include <stdint.h>
 
+#include "stm32f411xx_hal.h"
 
+#define SUMA '+'
+#define RESTA '-'
+#define MULTIPLICACION '*'
+#define DIVISION '/'
 
-int main(void)
-{
-    /* Loop forever */
-	while(1){
+//Funcion switch-case
 
+uint16_t resultadoOperacion(uint8_t tipoDeOperacion, uint8_t A, uint8_t B);
+
+int main(void){
+	uint16_t operacionFinal = 0;
+	operacionFinal = resultadoOperacion(SUMA,2,3);
+	operacionFinal++;
+}
+uint16_t resultadoOperacion(uint8_t tipoDeOperacion, uint8_t A, uint8_t B){
+	uint16_t resultado = 0;
+
+	switch(tipoDeOperacion){
+		case SUMA:{
+			resultado = A+B;
+			break;
+		}
+		case RESTA:{
+					resultado = A-B;
+					break;
+				}
+		case MULTIPLICACION:{
+					resultado = A*B;
+					break;
+				}
+		case DIVISION:{
+					resultado = A/B;
+					break;
+				}
+		default:{
+			resultado = 0;
+			break;
+		}
+		return resultado;
 	}
-	return 0;
 }
