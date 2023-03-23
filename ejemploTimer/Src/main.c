@@ -19,11 +19,14 @@
 #include <stm32f4xx.h>
 #include <stdint.h>
 #include "GPIOxDriver.h"
+#include "BasicTimer.h"
 
+uint8_t flag ;
 GPIO_Handler_t handlerOnBoardLed = {0};
+BasicTimer_Handler_t handlerTimer= {0};
 
 int main(void){
-	//Configurar  el handler
+	//Configurar  el handler del led
 			handlerOnBoardLed.pGPIOx = GPIOA;
 			handlerOnBoardLed.GPIO_PinConfig.GPIO_PinNumber = PIN_5;
 			handlerOnBoardLed.GPIO_PinConfig.GPIO_PinMode = GPIO_MODE_OUT;
@@ -32,22 +35,33 @@ int main(void){
 
 			//Cargarle el config
 			GPIO_Config(&handlerOnBoardLed);
-			GPIO_WritePin(&handlerOnBoardLed,SET);
 
+	//Configurar el handler del timer
+			handlerTimer.ptrTIMx = TIM2;
+			handlerTimer.TIMx_Config.TIMx_mode = BTIMER_MODE_UP;
+			handlerTimer.TIMx_Config.TIMx_speed = BTIMER_SPEED_1ms;
+			handlerTimer.TIMx_Config.TIMx_period = 250;
+			handlerTimer.TIMx_Config.TIMx_interruptEnable = 1;
+
+			//Cargarle el config
+			BasicTimer_Config(&handlerTimer);
+			/*
 			//Para configurar el registro con el timer, timer 2 esta en APB1
 			RCC->APB1ENR |= RCC_AP1ENR_TIM2EN;//Es lo mismo a (1<<0); Se activa el periferico en el bus
 			TIM2->CCR1 &= ~TIM_CR1_DIR;// Es lo mismo que ~(1<<4) se configura la direccion
 			TIM2->PSC = 16000; //Para que se modifique el counter cada mS el counter suba un valor el reloj es 16M, 16M/16k => 1000 ciclos => 1mS
 			TIM2->CNT = 0; //Para que empiece a contar desde 0
 			TIM2->ARR = 250; //Para que cuente hasta 250 mS
-			TIM2->CR1 |= TIM_CR1_CEN; //Para habilitar el Counter Enable
+			TIM2->CR1 |= TIM_CR1_CEN; //Para habilitar el Counter Enable*/
 
 	while(1){
-		if(TIM2->SR & TIM_SR_UIF ){
-			GPIO_TogglePin(&handlerOnBoardLed);//Se hace que se prenda el pin, esa toggle pin se tiene que realizar
-			TIM2->SR &= ~TIM_SR_UIF;//Se baja la bandera
-//For que cuando el codigo llegue ahí
-			//NOP()
+		if(flag){
+			GPIOxTogglePin(&handlerOnBoardLed);//Se hace que se prenda el pin, esa toggle pin se tiene que realizar
+			flag = 0;
 		}
 	}
+}
+
+void BasicTimer2_Callback(){
+	flag = 1;
 }

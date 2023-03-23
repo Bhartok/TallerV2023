@@ -78,6 +78,18 @@ void GPIO_Config (GPIO_Handler_t *pGPIOHandler){
 	}
 }//Fin del GPIO_Config
 
+//Funcion utilizada para cambiar el estado del pin entregado en el handler asignando el valor entregado en la variable newState
+void GPIO_WritePin(GPIO_Handler_t *pPinHandler, uint8_t newState){
+	if(newState == SET){
+		//Trabajando con la parte baja del registro(SET)
+		pPinHandler->pGPIOx->BSRR |= (SET << pPinHandler->GPIO_PinConfig.GPIO_PinNumber);
+	}else{
+		//Trabajando con la parte alta del registro(RESET)
+		pPinHandler->pGPIOx->BSRR |= (SET << (pPinHandler->GPIO_PinConfig.GPIO_PinNumber + 16));
+	}
+}
+
+
 //Funcion utilizada para leer el estado de un pin especifico
 uint32_t GPIO_ReadPin(GPIO_Handler_t *pPinHandler){
 	//Este va a ser la variable que retornaremos

@@ -108,14 +108,6 @@ int main(void){
 	GPIO_Config(&handlerPinA6);
 	GPIO_Config(&handlerPinB8);
 	GPIO_Config(&handlerPinC6);
-	/*
-	 * A)
-	 * El problema con el read pin es que se obtenía el IDR y se le shifteaba PinNumber de veces a la derecha, haciendo que se obtuviera un binario
-	 * que tuviera como primera posición el estado del pin, mas no el estado del pin.
-	 * B)
-	 * La solución del problema fue "eliminar" Los registros sobrantes que quedaban a la izquierda, haciendo una operación AND entre el binario
-	 * que se obtenía, y la mascara (1) (Un binario con solo un 1 en la primera posicion, el resto 0)
-	*/
 
 	//Variable que va a llevar el estado del contador para el punto 3
 	uint32_t counter =1;
@@ -166,7 +158,7 @@ int main(void){
 		GPIO_WritePin(&handlerPinB8,c5);
 		GPIO_WritePin(&handlerPinC6,c6);
 		GPIO_WritePin(&handlerPinC9,c7);
-		estado = GPIO_ReadPin(&handlerButtonC13);
+		estado = GPIO_ReadPin(ButtonC13);
 		//Si el boton esta presionado, estado=0; de lo contrario, estado=1
 		if(estado){
 			//Si no está presionado, aumente valor
@@ -177,9 +169,5 @@ int main(void){
 		}
 
 	}
-
-
-
-
 
 }
