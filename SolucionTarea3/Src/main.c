@@ -293,15 +293,15 @@ void callback_extInt4(void){
 		}
 	}else{//Si está en modo culebrita
 		if(!rotacion){//Si es una rotación CCW
-			if(contadorCulebra == 0){//Condicional utilizado para lograr que pase de la posición 1 a la posición 12 cuando se disminuya de 1
-				contadorCulebra = 13;
-			}
 			contadorCulebra--;//Se disminuye en 1 la posición de la culebrita
-		}else{//CW
-			if(contadorCulebra == 13){//Condicional utilizado para lograr que pase de la posición 12 a la posición 1 cuando se pase de 12
-				contadorCulebra = 0;
+			if(contadorCulebra == 0){//Condicional utilizado para lograr que pase de la posición 1 a la posición 12 cuando se disminuya de 1
+				contadorCulebra = 12;
 			}
+		}else{//CW
 			contadorCulebra++;//Se aumenta en 1 unidad
+			if(contadorCulebra == 13){//Condicional utilizado para lograr que pase de la posición 12 a la posición 1 cuando se pase de 12
+				contadorCulebra = 1;
+			}
 
 
 	}
